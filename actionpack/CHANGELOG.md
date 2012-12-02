@@ -1,6 +1,26 @@
 ## Rails 4.0.0 (unreleased) ##
 
-*   `assert_template` is no more passing with empty string.
+*   Sweepers was extracted from Action Controller as `rails-observers` gem.
+
+    *Rafael Mendonça França*
+
+*   Add option flag to `CacheHelper#cache` to manually bypass automatic template digests:
+
+        <% cache project, skip_digest: true do %>
+          ...
+        <% end %>
+
+    *Drew Ulmer*
+
+*   No sort Hash options in #grouped_options_for_select. *Sergey Kojin*
+
+*   Accept symbols as #send_data :disposition value *Elia Schito*
+
+*   Add i18n scope to distance_of_time_in_words. *Steve Klabnik*
+
+*   `assert_template`:
+    - is no more passing with empty string.
+    - is now validating option keys. It accepts: `:layout`, `:partial`, `:locals` and `:count`.
 
     *Roberto Soares*
 

@@ -144,6 +144,34 @@ class HasManyAssociationsTest < ActiveRecord::TestCase
     assert_equal 'defaulty', bulb.name
   end
 
+  def test_building_the_associated_object_with_implicit_sti_base_class
+    firm = DependentFirm.new
+    company = firm.companies.build
+    assert_kind_of Company, company, "Expected #{company.class} to be a Company"
+  end
+
+  def test_building_the_associated_object_with_explicit_sti_base_class
+    firm = DependentFirm.new
+    company = firm.companies.build(:type => "Company")
+    assert_kind_of Company, company, "Expected #{company.class} to be a Company"
+  end
+
+  def test_building_the_associated_object_with_sti_subclass
+    firm = DependentFirm.new
+    company = firm.companies.build(:type => "Client")
+    assert_kind_of Client, company, "Expected #{company.class} to be a Client"
+  end
+
+  def test_building_the_associated_object_with_an_invalid_type
+    firm = DependentFirm.new
+    assert_raise(ActiveRecord::SubclassNotFound) { firm.companies.build(:type => "Invalid") }
+  end
+
+  def test_building_the_associated_object_with_an_unrelated_type
+    firm = DependentFirm.new
+    assert_raise(ActiveRecord::SubclassNotFound) { firm.companies.build(:type => "Account") }
+  end
+
   def test_association_keys_bypass_attribute_protection
     car = Car.create(:name => 'honda')
 
@@ -1579,7 +1607,7 @@ class HasManyAssociationsTest < ActiveRecord::TestCase
     assert_equal [tagging], post.taggings
   end
 
-  def test_build_with_polymotphic_has_many_does_not_allow_to_override_type_and_id
+  def test_build_with_polymorphic_has_many_does_not_allow_to_override_type_and_id
     welcome = posts(:welcome)
     tagging = welcome.taggings.build(:taggable_id => 99, :taggable_type => 'ShouldNotChange')
 

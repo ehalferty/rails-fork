@@ -1,5 +1,23 @@
 ## Rails 4.0.0 (unreleased) ##
 
+*   Patched Marshal#load to work with constant autoloading.
+    Fixes autoloading with cache stores that relay on Marshal(MemCacheStore and FileStore). [fixes #8167]
+
+    *Uriel Katz*
+
+*   Make `Time.zone.parse` to work with JavaScript format date strings. *Andrew White*
+
+*   Add `DateTime#seconds_until_end_of_day` and `Time#seconds_until_end_of_day`
+    as a complement for `seconds_from_midnight`; useful when setting expiration
+    times for caches, e.g.:
+
+        <% cache('dashboard', expires_in: Date.current.seconds_until_end_of_day) do %>
+          ...
+
+    *Olek Janiszewski*
+
+*   No longer proxy ActiveSupport::Multibyte#class. *Steve Klabnik*
+
 *   Deprecate `ActiveSupport::TestCase#pending` method, use `skip` from MiniTest instead. *Carlos Antonio da Silva*
 
 *   `XmlMini.with_backend` now may be safely used with threads:
@@ -63,7 +81,7 @@
 
     *Jeremy Kemper*
 
-*   Add logger.push_tags and .pop_tags to complement logger.tagged:
+*   Add `logger.push_tags` and `.pop_tags` to complement logger.tagged:
 
         class Job
           def before

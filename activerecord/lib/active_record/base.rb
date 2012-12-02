@@ -13,6 +13,7 @@ require 'active_support/core_ext/string/behavior'
 require 'active_support/core_ext/kernel/singleton_class'
 require 'active_support/core_ext/module/introspection'
 require 'active_support/core_ext/object/duplicable'
+require 'active_support/core_ext/class/subclasses'
 require 'arel'
 require 'active_record/errors'
 require 'active_record/log_subscriber'
@@ -320,7 +321,6 @@ module ActiveRecord #:nodoc:
   # So it's possible to assign a logger to the class through <tt>Base.logger=</tt> which will then be used by all
   # instances in the current object space.
   class Base
-    extend ActiveModel::Observing::ClassMethods
     extend ActiveModel::Naming
 
     extend ActiveSupport::Benchmarkable
@@ -348,7 +348,6 @@ module ActiveRecord #:nodoc:
     include Locking::Pessimistic
     include AttributeMethods
     include Callbacks
-    include ActiveModel::Observing
     include Timestamp
     include Associations
     include ActiveModel::SecurePassword

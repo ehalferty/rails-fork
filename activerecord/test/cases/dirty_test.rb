@@ -12,7 +12,7 @@ class Pirate # Just reopening it, not defining it
   after_update :check_changes
 
 private
-  # after_save/update in sweepers, observers, and the model itself
+  # after_save/update and the model itself
   # can end up checking dirty status and acting on the results
   def check_changes
     if self.changed?
@@ -209,10 +209,10 @@ class DirtyTest < ActiveRecord::TestCase
       target.table_name = 'topics'
 
       topic = target.create
-      assert_equal nil, topic.written_on
+      assert_nil topic.written_on
 
       topic.written_on = ""
-      assert_equal nil, topic.written_on
+      assert_nil topic.written_on
       assert !topic.written_on_changed?
     end
   end

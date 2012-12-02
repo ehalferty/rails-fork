@@ -5,7 +5,7 @@ Active Support is the Ruby on Rails component responsible for providing Ruby lan
 
 It offers a richer bottom-line at the language level, targeted both at the development of Rails applications, and at the development of Ruby on Rails itself.
 
-By referring to this guide you will learn the extensions to the Ruby core classes and modules provided by Active Support.
+After reading this guide, you will know:
 
 --------------------------------------------------------------------------------
 
@@ -2067,14 +2067,6 @@ The sum of an empty receiver can be customized in this form as well:
 [].sum(1) {|n| n**3} # => 1
 ```
 
-The method `ActiveRecord::Observer#observed_subclasses` for example is implemented this way:
-
-```ruby
-def observed_subclasses
-  observed_classes.sum([]) { |klass| klass.send(:subclasses) }
-end
-```
-
 NOTE: Defined in `active_support/core_ext/enumerable.rb`.
 
 ### `index_by`
@@ -3727,6 +3719,25 @@ WARNING. Note you can't append with `atomic_write`.
 The auxiliary file is written in a standard directory for temporary files, but you can pass a directory of your choice as second argument.
 
 NOTE: Defined in `active_support/core_ext/file/atomic.rb`.
+
+Extensions to `Marshal`
+-----------------------
+
+### `load`
+
+Active Support adds constant autoloading support to `load`.
+
+For example, the file cache store deserializes this way:
+
+```ruby
+File.open(file_name) { |f| Marshal.load(f) }
+```
+
+If the cached data refers to a constant that is unknown at that point, the autoloading mechanism is triggered and if it succeeds the deserialization is retried transparently.
+
+WARNING. If the argument is an `IO` it needs to respond to `rewind` to be able to retry. Regular files respond to `rewind`.
+
+NOTE: Defined in `active_support/core_ext/marshal.rb`.
 
 Extensions to `Logger`
 ----------------------
